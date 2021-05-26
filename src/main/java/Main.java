@@ -45,7 +45,7 @@ public class Main {
                 .timeout(1000*3)
                 .execute();
 
-        System.out.println(response.body());
+        System.out.println(response.url().toString());
 
         //PUT
         Connection.Response response2 = Jsoup.connect(url)
