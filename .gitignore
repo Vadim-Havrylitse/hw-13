@@ -1,0 +1,6 @@
+# Project exclude paths
+/target/
+.idea
+/test/
+pom.xml
+hw-13.iml
