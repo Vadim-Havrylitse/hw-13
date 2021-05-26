@@ -1,4 +1,4 @@
-public class Address extends User{
+public class Address extends Users {
     /*
     "address": {
       "street": "Kattie Turnpike",

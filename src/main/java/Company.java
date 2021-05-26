@@ -1,4 +1,4 @@
-public class Company extends User{
+public class Company extends Users {
     /*
     "company": {
       "name": "Hoeger LLC",
