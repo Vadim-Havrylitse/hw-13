@@ -1,34 +1,37 @@
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import okhttp3.*;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 public class Main {
 
-    static String url = "https://jsonplaceholder.typicode.com/users";
+    public final static String url = "https://jsonplaceholder.typicode.com/users";
+    public final static Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
 
 
     public static void main(String[] args) throws IOException {
 
-        Users myUsers = new Users.Builder()
+        User myUser = User.builder()
                 .name("Vasya")
                 .username("bigboss")
                 .email("fikole@grin.com")
                 .phone("+9379992")
                 .website("www.www.www/www")
-                .address(new Address.Builder()
+                .address(Address.builder()
                         .city("Nico")
                         .suite("FEFSDF")
-                        .zipcode(54000)
+                        .zipcode("54000")
                         .street("Central avenue")
-                        .geo(new Geo.Builder()
-                                .lat(+52.5648f)
-                                .lng(-53.6584f)
+                        .geo(Geo.builder()
+                                .lat("+52.5648")
+                                .lng("-53.6584")
                                 .build())
                         .build())
-                .company(new Company.Builder()
+                .company(Company.builder()
                         .nameCompany("Facecontrol")
                         .bs("dfsdfsvs")
                         .catchPhrase("dsfavwef3333333")
@@ -36,29 +39,33 @@ public class Main {
                 .build();
 
         //POST
-        Connection.Response response = Jsoup.connect(url)
-                .ignoreContentType(true)
-                .followRedirects(true)
-                .ignoreHttpErrors(true)
-                .method(Connection.Method.POST)
-                .requestBody(new Gson().toJson(myUsers, Users.class))
-                .timeout(1000*3)
-                .execute();
-
-        System.out.println(response.url().toString());
+        OkHttpClient client = new OkHttpClient();
+        Request request1 = new Request.Builder()
+                .url(url)
+                .post(RequestBody.create(gsonBuilder.toJson(myUser),
+                        MediaType.parse("application/json")))
+                .build();
+        Response response = client.newCall(request1).execute();
+        System.out.println(response.body().string());
 
         //PUT
-        Connection.Response response2 = Jsoup.connect(url)
-                .ignoreContentType(true)
-                .followRedirects(true)
-                .ignoreHttpErrors(true)
-                .method(Connection.Method.PUT)
-                .requestBody(new GsonBuilder().setPrettyPrinting().create().toJson(myUsers, Users.class))
-                .timeout(1000*3)
-                .execute();
+        myUser.setName("fffffffff");
+        Request request2 = new Request.Builder()
+                .url(url)
+                .put(RequestBody.create(gsonBuilder.toJson(myUser), MediaType.parse("application/json")))
+                .build();
+        Response response2 = client.newCall(request2).execute();
+        System.out.println(response2.body().string());
 
-        Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
-        System.out.println(gsonBuilder.fromJson(response2.body(), Users.class));
+
+        //DELETE
+        Request request3 = new Request.Builder()
+                .url(url)
+                .delete(RequestBody.create(gsonBuilder.toJson(myUser), MediaType.parse("application/json")))
+                .build();
+        Response response3 = client.newCall(request3).execute();
+        System.out.println(response3.body().string());
+
     }
 }
 
