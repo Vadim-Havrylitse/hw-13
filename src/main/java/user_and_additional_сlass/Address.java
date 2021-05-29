@@ -1,4 +1,4 @@
-import lombok.Data;
+package user_and_additional_сlass;
 
 import java.io.Serializable;
 

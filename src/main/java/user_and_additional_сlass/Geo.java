@@ -1,3 +1,5 @@
+package user_and_additional_сlass;
+
 import java.io.Serializable;
 
 @lombok.Data

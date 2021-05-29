@@ -1,3 +1,5 @@
+package user_and_additional_сlass;
+
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;

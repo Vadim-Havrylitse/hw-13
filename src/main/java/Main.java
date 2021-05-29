@@ -1,17 +1,27 @@
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import okhttp3.*;
-import org.jsoup.Connection;
-import org.jsoup.Jsoup;
+import lombok.SneakyThrows;
+import my_retrofit.RetrofitClient;
+import posts_and_coments.CommentToPost;
+import posts_and_coments.PostByUser;
+import user_and_additional_сlass.Address;
+import user_and_additional_сlass.Company;
+import user_and_additional_сlass.Geo;
+import user_and_additional_сlass.User;
 
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.Arrays;
+import java.time.LocalDateTime;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
+
+import static my_retrofit.RetrofitConfig.createClient;
+import static my_retrofit.RetrofitConfig.execute;
 
 public class Main {
 
-    public final static String url = "https://jsonplaceholder.typicode.com/users";
-    public final static Gson gsonBuilder = new GsonBuilder().setPrettyPrinting().create();
-
+    public final static RetrofitClient clientConnect = createClient("https://jsonplaceholder.typicode.com", RetrofitClient.class);
 
     public static void main(String[] args) throws IOException {
 
@@ -37,35 +47,47 @@ public class Main {
                         .catchPhrase("dsfavwef3333333")
                         .build())
                 .build();
+        User postResponseUser = execute(clientConnect.addNewUsers(myUser));
+        //System.out.println(postResponseUser.getId());
 
-        //POST
-        OkHttpClient client = new OkHttpClient();
-        Request request1 = new Request.Builder()
-                .url(url)
-                .post(RequestBody.create(gsonBuilder.toJson(myUser),
-                        MediaType.parse("application/json")))
-                .build();
-        Response response = client.newCall(request1).execute();
-        System.out.println(response.body().string());
+        myUser.setEmail("sdfsefwfassssssswwww@1111111111");
+        myUser.setUsername("Vigo");
+        myUser.setWebsite("comcomcom1111.122");
+        User putResponseUser = execute(clientConnect.updateUser(myUser, "1"));
+        //System.out.println(putResponseUser);
 
-        //PUT
-        myUser.setName("fffffffff");
-        Request request2 = new Request.Builder()
-                .url(url)
-                .put(RequestBody.create(gsonBuilder.toJson(myUser), MediaType.parse("application/json")))
-                .build();
-        Response response2 = client.newCall(request2).execute();
-        System.out.println(response2.body().string());
+        User deleteResponseUser = execute(clientConnect.deleteUserWithId("3"));
+        //System.out.println(deleteResponseUser);
 
+        List<User> allResponseUser = execute(clientConnect.getAllToUsers());
+        //allResponseUser.forEach(System.out::println);
 
-        //DELETE
-        Request request3 = new Request.Builder()
-                .url(url)
-                .delete(RequestBody.create(gsonBuilder.toJson(myUser), MediaType.parse("application/json")))
-                .build();
-        Response response3 = client.newCall(request3).execute();
-        System.out.println(response3.body().string());
+        User getWithIdResponseUser = execute(clientConnect.getUserWithId("3"));
+        //System.out.println(getWithIdResponseUser);
 
+        List<User> getWithUsernameResponseUser = execute(clientConnect.getUserWithUsername("Bret"));
+        //getWithUsernameResponseUser.forEach(System.out::println);
+
+        writeNewComments("5");
+
+    }
+
+    @SneakyThrows
+    public static void writeNewComments(String userId) {
+        System.out.println("НАЧИНАЮ МЕТОД" + LocalDateTime.now());
+        List<PostByUser> allPostByUserWithUserId = execute(clientConnect.getPostsWithUserId(userId));
+        PostByUser maxPost = Collections.max(allPostByUserWithUserId, (o1, o2) -> o1.id - o2.id);
+        int maxPostId = maxPost.id;
+        List<CommentToPost> allCommentByUserWithPostId = execute(clientConnect.getCommentsWithPostId(String.valueOf(maxPostId)));
+        File file = new File("src/main/resources",
+                "user-" + userId + "-post-" + maxPostId + "-comments.json");
+        System.out.println("ФАЙЛ СОЗДАН? - " + file.createNewFile() + " " + LocalDateTime.now());
+
+        try (FileWriter fileWriter = new FileWriter(file)) {
+            fileWriter.write(allCommentByUserWithPostId.toString());
+            fileWriter.flush();
+        }
+        System.out.println("ФАЙЛ ЗАПИСАН " + LocalDateTime.now());
     }
 }
 
