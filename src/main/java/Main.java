@@ -48,25 +48,25 @@ public class Main {
                         .build())
                 .build();
         User postResponseUser = execute(clientConnect.addNewUsers(myUser));
-        //System.out.println(postResponseUser.getId());
+        System.out.println(postResponseUser.getId());
 
         myUser.setEmail("sdfsefwfassssssswwww@1111111111");
         myUser.setUsername("Vigo");
         myUser.setWebsite("comcomcom1111.122");
         User putResponseUser = execute(clientConnect.updateUser(myUser, "1"));
-        //System.out.println(putResponseUser);
+        System.out.println(putResponseUser);
 
         User deleteResponseUser = execute(clientConnect.deleteUserWithId("3"));
-        //System.out.println(deleteResponseUser);
+        System.out.println(deleteResponseUser);
 
         List<User> allResponseUser = execute(clientConnect.getAllToUsers());
-        //allResponseUser.forEach(System.out::println);
+        allResponseUser.forEach(System.out::println);
 
         User getWithIdResponseUser = execute(clientConnect.getUserWithId("3"));
-        //System.out.println(getWithIdResponseUser);
+        System.out.println(getWithIdResponseUser);
 
         List<User> getWithUsernameResponseUser = execute(clientConnect.getUserWithUsername("Bret"));
-        //getWithUsernameResponseUser.forEach(System.out::println);
+        getWithUsernameResponseUser.forEach(System.out::println);
 
         writeNewComments("5");
 
