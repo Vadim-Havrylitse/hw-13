@@ -1,4 +1,4 @@
-package posts_and_coments;
+package posts_coments_task;
 
 import java.io.Serializable;
 import java.util.StringJoiner;

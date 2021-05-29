@@ -1,7 +1,8 @@
 import lombok.SneakyThrows;
 import my_retrofit.RetrofitClient;
-import posts_and_coments.CommentToPost;
-import posts_and_coments.PostByUser;
+import posts_coments_task.CommentToPost;
+import posts_coments_task.PostByUser;
+import posts_coments_task.Task;
 import user_and_additional_сlass.Address;
 import user_and_additional_сlass.Company;
 import user_and_additional_сlass.Geo;
@@ -12,9 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.*;
-import java.util.function.Consumer;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 import static my_retrofit.RetrofitConfig.createClient;
 import static my_retrofit.RetrofitConfig.execute;
@@ -47,6 +45,7 @@ public class Main {
                         .catchPhrase("dsfavwef3333333")
                         .build())
                 .build();
+
         User postResponseUser = execute(clientConnect.addNewUsers(myUser));
         System.out.println(postResponseUser.getId());
 
@@ -70,6 +69,8 @@ public class Main {
 
         writeNewComments("5");
 
+        getAllTaskForUser("5");
+
     }
 
     @SneakyThrows
@@ -88,6 +89,12 @@ public class Main {
             fileWriter.flush();
         }
         System.out.println("ФАЙЛ ЗАПИСАН " + LocalDateTime.now());
+    }
+
+
+    public static void getAllTaskForUser(String userId) {
+        List<Task> allTaskForUser = execute(clientConnect.getAllTaskWithUserId(userId, false));
+        allTaskForUser.forEach(System.out::println);
     }
 }
 

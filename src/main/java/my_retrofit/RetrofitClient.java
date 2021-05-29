@@ -1,7 +1,8 @@
 package my_retrofit;
 
-import posts_and_coments.CommentToPost;
-import posts_and_coments.PostByUser;
+import posts_coments_task.CommentToPost;
+import posts_coments_task.PostByUser;
+import posts_coments_task.Task;
 import retrofit2.Call;
 import retrofit2.http.*;
 import user_and_additional_сlass.User;
@@ -40,4 +41,8 @@ public interface RetrofitClient {
     @GET("posts/{postId}/comments")
     @Headers({"Content-Type: application/json"})
     Call<List<CommentToPost>> getCommentsWithPostId(@Path("postId") String postId);
+
+    @GET("users/{id}/todos")
+    @Headers({"Content-Type: application/json"})
+    Call<List<Task>> getAllTaskWithUserId (@Path("id") String id, @Query("completed") Boolean completed);
 }

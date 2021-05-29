@@ -1,4 +1,4 @@
-package posts_and_coments;
+package posts_coments_task;
 
 import java.io.Serializable;
 import java.util.StringJoiner;
@@ -7,20 +7,19 @@ import java.util.StringJoiner;
 @lombok.AllArgsConstructor()
 @lombok.NoArgsConstructor
 @lombok.Builder
-public class PostByUser implements Serializable{
-    public Integer userId;
-    public Integer id;
+public class Task implements Serializable {
+    public int userId;
+    public int id;
     public String title;
-    public String body;
+    public boolean completed;
 
     @Override
     public String toString() {
-        return new StringJoiner("\n\t\t", PostByUser.class.getSimpleName() + "[", "]")
+        return new StringJoiner("\n\t", Task.class.getSimpleName() + "[", "]")
                 .add("userId=" + userId)
                 .add("id=" + id)
                 .add("title='" + title + "'")
-                .add("body='" + body + "'")
+                .add("completed=" + completed)
                 .toString();
     }
-
 }
